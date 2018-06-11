@@ -57,7 +57,7 @@ def main():
 
 		# Download process
 		subprocess.call(['ascp','-k','1','-QTl','100m','--file-list='+file_list,'--partial-file-suffix=PART','--ignore-host-key','--mode=recv','--host='+os.environ['ASCP_EGA_HOST'],'--user='+os.environ['ASCP_EGA_USER'],'.'])
-
+		mkdir_p(os.path.dirname(results.output))
 		shutil.move(os.path.basename(results.file_name), results.output)
 
 		# Deletion of temporary elements
@@ -72,6 +72,15 @@ def main():
 
 def randomword(length):
    return ''.join(random.choice(string.lowercase) for i in range(length))
+
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except OSError, exc:  # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else:
+            raise
 
 if __name__ == "__main__":
     main()
